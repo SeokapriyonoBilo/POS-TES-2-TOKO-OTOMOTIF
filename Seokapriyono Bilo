@@ -1,0 +1,161 @@
+Seokapriyono Bilo
+Nim : 2309116095
+Keas : B
+
+~~~
+
+class Kendaraan:
+    def __init__(self, id, nama, harga):
+        self.id = id
+        self.nama = nama
+        self.harga = harga
+
+class Admin:
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+        self.kendaraan = []
+
+    def tambah_kendaraan(self, kendaraan):
+        self.kendaraan.append(kendaraan)
+
+    def update_kendaraan(self, id_kendaraan, nama_baru, harga_baru):
+        for kendaraan in self.kendaraan:
+            if kendaraan.id == id_kendaraan:
+                kendaraan.nama = nama_baru
+                kendaraan.harga = harga_baru
+
+    def hapus_kendaraan(self, id_kendaraan):
+        self.kendaraan = [k for k in self.kendaraan if k.id != id_kendaraan]
+
+    def daftar_kendaraan(self):
+        for kendaraan in self.kendaraan:
+            print(f"ID: {kendaraan.id}, Nama: {kendaraan.nama}, Harga: {kendaraan.harga}")
+
+class Pembeli:
+    def __init__(self):
+        self.keranjang = []
+
+    def tambah_ke_keranjang(self, kendaraan):
+        self.keranjang.append(kendaraan)
+
+    def lihat_keranjang(self):
+        if not self.keranjang:
+            print("Keranjang Anda kosong.")
+        else:
+            print("Keranjang Anda:")
+            for kendaraan in self.keranjang:
+                print(f"Nama: {kendaraan.nama}, Harga: {kendaraan.harga}")
+
+    def checkout(self):
+        total_harga = sum(kendaraan.harga for kendaraan in self.keranjang)
+        print(f"Total Harga: {total_harga}")
+        self.keranjang = []
+
+# Inisialisasi admin dan kendaraan
+admin = Admin("admin", "admin123")
+kendaraan1 = Kendaraan(1, "Omoda 5", 334800000)
+kendaraan2 = Kendaraan(2, "Tiggo 8 Pro", 528500000)
+Kendaraan3 = Kendaraan(3, "Alvez", 209000000)
+kendaraan4 = Kendaraan(4, "Almaz Hybrid", 473000000)
+kendaraan5 = Kendaraan(5, "Stargazer", 247200000)
+kendaraan6 = Kendaraan(6, "Ioniq 5", 766000000)
+kendaraan7 = Kendaraan(7, "Cortez", 258500000)
+kendaraan8 = Kendaraan(8, "Tiggo 7 Pro", 369500000)
+admin.tambah_kendaraan(kendaraan1)
+admin.tambah_kendaraan(kendaraan2)
+admin.tambah_kendaraan(Kendaraan3)
+admin.tambah_kendaraan(kendaraan4)
+admin.tambah_kendaraan(kendaraan5)
+admin.tambah_kendaraan(kendaraan6)
+admin.tambah_kendaraan(kendaraan7)
+admin.tambah_kendaraan(kendaraan8)
+
+# Inisialisasi pembeli
+pembeli = Pembeli()
+
+# Login admin
+username = input("Masukkan username: ")
+password = input("Masukkan password: ")
+
+if username == admin.username and password == admin.password:
+    while True:
+        print("\nMenu Admin:")
+        print("1. Tambah Kendaraan")
+        print("2. Update Kendaraan")
+        print("3. Hapus Kendaraan")
+        print("4. Daftar Kendaraan")
+        print("5. Logout")
+        pilihan = input("Masukkan pilihan Anda: ")
+
+        if pilihan == "1":
+            nama = input("Masukkan nama kendaraan: ")
+            harga = float(input("Masukkan harga kendaraan: "))
+            kendaraan = Kendaraan(len(admin.kendaraan) + 1, nama, harga)
+            admin.tambah_kendaraan(kendaraan)
+            print("Kendaraan berhasil ditambahkan.")
+
+        elif pilihan == "2":
+            admin.daftar_kendaraan()
+            id_kendaraan = int(input("Masukkan ID kendaraan yang ingin diupdate: "))
+            nama_baru = input("Masukkan nama baru: ")
+            harga_baru = float(input("Masukkan harga baru: "))
+            admin.update_kendaraan(id_kendaraan, nama_baru, harga_baru)
+            print("Kendaraan berhasil diupdate.")
+
+        elif pilihan == "3":
+            admin.daftar_kendaraan()
+            id_kendaraan = int(input("Masukkan ID kendaraan yang ingin dihapus: "))
+            admin.hapus_kendaraan(id_kendaraan)
+            print("Kendaraan berhasil dihapus.")
+
+        elif pilihan == "4":
+            admin.daftar_kendaraan()
+
+        elif pilihan == "5":
+            break
+
+else:
+    print("Login gagal. Username atau password salah.")
+
+# Pembeli melakukan transaksi
+while True:
+    print("\nMenu Pembeli:")
+    print("1. Tambah ke Keranjang")
+    print("2. Lihat Keranjang")
+    print("3. Checkout")
+    print("4. Logout")
+    pilihan = input("Masukkan pilihan Anda: ")
+
+    if pilihan == "1":
+        admin.daftar_kendaraan()
+        id_kendaraan = int(input("Masukkan ID kendaraan yang ingin ditambahkan ke keranjang: "))
+        kendaraan = next((k for k in admin.kendaraan if k.id == id_kendaraan), None)
+        if kendaraan:
+            pembeli.tambah_ke_keranjang(kendaraan)
+            print("Kendaraan berhasil ditambahkan ke keranjang.")
+
+    elif pilihan == "2":
+        pembeli.lihat_keranjang()
+
+    elif pilihan == "3":
+        pembeli.checkout()
+
+    elif pilihan == "4":
+        break
+
+
+from prettytable import PrettyTable
+table = PrettyTable()
+table.field_names = ["No", "Nama", "warna", "harga"]
+table.add_row([1, "Omoda 5", "silver", "334800000"])
+table.add_row([2, "Tiggo 8 Pro", "merah", "528500000"])
+table.add_row([3, "Alvez", "Putih", "209000000"])
+table.add_row([4, "Almaz Hybrid", "kuning", "473000000"])
+table.add_row([5, "Stargazer", "Hitam", "247200000"])
+table.add_row([6, "Ioniq 5", "abu-abu", "766000000"])
+table.add_row([7, "Cortez", "biru", "258500000"])
+table.add_row([8, "Tiggo 7 Pro", "Hijau", "369500000"])
+print(table)
+
+~~~
